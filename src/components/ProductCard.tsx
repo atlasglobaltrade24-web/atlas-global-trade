@@ -40,7 +40,7 @@ export function ProductCard({
             : "bg-clay-700/80 text-ivory-100",
         )}
       >
-        {category.name}
+        {product.badgeLabel ?? category.name}
       </span>
 
       <div className="flex flex-1 flex-col p-5">

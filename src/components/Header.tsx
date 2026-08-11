@@ -208,12 +208,16 @@ export default function Header() {
                               <p className="text-xs uppercase tracking-[0.24em] text-[#0F382C]">Whole Spices</p>
                               <div className="mt-4 space-y-3 text-sm">
                                 {[
-                                  "Cumin",
-                                  "Coriander",
                                   "Black Pepper",
-                                  "Turmeric",
-                                  "Dry Red Chilli",
+                                  "Cinnamon",
+                                  "Cloves",
+                                  "Coriander Seeds",
+                                  "Cumin",
                                   "Green Cardamom",
+                                  "Nut Meg",
+                                  "Dry Red Chilli",
+                                  "Saffron",
+                                  "Turmeric",
                                 ].map((label) => (
                                   <Link
                                     key={label}
@@ -232,11 +236,8 @@ export default function Header() {
                               <p className="text-xs uppercase tracking-[0.24em] text-[#0F382C]">Dehydrated Ingredients</p>
                               <div className="mt-4 space-y-3 text-sm">
                                 {[
-                                  "Dehydrated Onion Flakes",
+                                  "Dehydrated Onion",
                                   "Dehydrated Garlic",
-                                  "Onion Granules",
-                                  "Garlic Granules",
-                                  "Kibbled Dehydrated Ingredients",
                                 ].map((label) => (
                                   <Link
                                     key={label}
