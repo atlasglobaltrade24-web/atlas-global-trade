@@ -435,14 +435,14 @@ export function MobileStickyCTA() {
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink-900/10 bg-ivory-50/95 px-4 py-3 backdrop-blur-lg md:hidden">
       <div className="flex gap-2">
         <a
-          href={`tel:${company.phone}`}
+          href={`https://api.whatsapp.com/send?phone=${company.whatsapp.replace(/[^0-9]/g, "")}`}
           aria-label="Call sales"
           className="grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-ink-900/15 text-ink-700"
         >
           <Icon name="phone" className="h-4.5 w-4.5" />
         </a>
         <a
-          href={`https://wa.me/`}
+          href={`https://api.whatsapp.com/send?phone=${company.whatsapp.replace(/[^0-9]/g, "")}`}
           aria-label="Chat on WhatsApp"
           className="grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-ink-900/15 text-ink-700"
         >

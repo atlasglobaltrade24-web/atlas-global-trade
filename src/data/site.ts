@@ -12,7 +12,7 @@ export const company = {
   established: "2025",
   email: "sales@atlasglobaltrade.com",
   phone: "+91-9607011491",
-  whatsapp: "+91-9607011491",
+  whatsapp: "9607011491",
   address: "KUNAL PARK, B-BLDG, 1ST FLOOR, A-WING, KESHAVNAGAR, CHINCHWAD, PUNE - 411033",
   city: "PUNE",
   state: "MAHARASHTRA",
