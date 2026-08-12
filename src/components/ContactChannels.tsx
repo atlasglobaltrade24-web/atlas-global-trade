@@ -1,6 +1,8 @@
 import { Icon } from "@/components/ui";
 import { company } from "@/data/site";
 
+
+
 const channels = [
   {
     icon: "whatsapp",

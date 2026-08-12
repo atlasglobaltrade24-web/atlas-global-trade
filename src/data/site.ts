@@ -10,7 +10,7 @@ export const company = {
   legalName: "ATLAS GLOBAL TRADE",
   monogram: "AG", // replace with initials of the real company name
   established: "2025",
-  email: "sales@atlasglobaltrade.com",
+  email: "sales@atlasglobaltradeindia.com",
   phone: "+91-9607011491",
   whatsapp: "9607011491",
   address: "KUNAL PARK, B-BLDG, 1ST FLOOR, A-WING, KESHAVNAGAR, CHINCHWAD, PUNE - 411033",
