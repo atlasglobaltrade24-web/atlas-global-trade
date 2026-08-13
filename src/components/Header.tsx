@@ -3,6 +3,7 @@ import { cn } from "@/utils/cn";
 import { Link, useRoute } from "@/lib/router";
 import { Button, Container, Icon } from "@/components/ui";
 import { company, navigation } from "@/data/site";
+import { categories, highlightedProducts, productsByCategory, products } from "@/data/products";
 
 /* ---------------- Logo ---------------- */
 export function Logo({ tone = "dark", compact = false }: { tone?: "dark" | "light"; compact?: boolean }) {
@@ -42,6 +43,121 @@ export function Logo({ tone = "dark", compact = false }: { tone?: "dark" | "ligh
         </span>
       )}
     </a>
+  );
+}
+
+/* ---------------- Products mega menu ---------------- */
+const categoryMenuTone: Record<
+  "forest" | "clay",
+  { panel: string; eyebrow: string; count: string; link: string; itemHover: string }
+> = {
+  forest: {
+    panel: "border-forest-600/15 bg-forest-100/40",
+    eyebrow: "text-forest-800",
+    count: "bg-forest-800 text-ivory-100",
+    link: "text-forest-800 hover:text-forest-700",
+    itemHover: "group-hover:text-forest-800",
+  },
+  clay: {
+    panel: "border-clay-500/20 bg-clay-100/40",
+    eyebrow: "text-clay-700",
+    count: "bg-clay-700 text-ivory-100",
+    link: "text-clay-700 hover:text-clay-600",
+    itemHover: "group-hover:text-clay-700",
+  },
+};
+
+function ProductsMegaMenu({ open }: { open: boolean }) {
+  return (
+    <div
+      className={cn(
+        "absolute left-1/2 top-full z-50 w-[min(840px,calc(100vw_-_3rem))] -translate-x-1/2 overflow-hidden rounded-[2rem] border border-[#E5E0D8] bg-white/95 p-6 shadow-[0_30px_60px_-30px_rgba(29,36,43,0.25)] transition-all duration-200",
+        open ? "pointer-events-auto opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-2",
+      )}
+    >
+      <div className="grid gap-5 lg:grid-cols-2">
+        {categories.map((cat) => {
+          const tone = categoryMenuTone[cat.accent];
+          const highlights = highlightedProducts(cat.id, 4);
+          const total = productsByCategory(cat.id).length;
+          return (
+            <div key={cat.id} className={cn("rounded-[1.5rem] border p-5", tone.panel)}>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className={cn("text-xs font-semibold uppercase tracking-[0.24em]", tone.eyebrow)}>
+                    {cat.name}
+                  </p>
+                  <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-slate-500">
+                    {cat.shortDescription}
+                  </p>
+                </div>
+                <span
+                  className={cn(
+                    "shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 text-[0.6875rem] font-semibold",
+                    tone.count,
+                  )}
+                >
+                  {total} {total === 1 ? "item" : "items"}
+                </span>
+              </div>
+
+              {highlights.length > 0 ? (
+                <div className="mt-4 space-y-1">
+                  {highlights.map((p) => (
+                    <Link
+                      key={p.id}
+                      to={`#/product/${p.slug}`}
+                      className="group -mx-2 flex items-center gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-white/80"
+                    >
+                      <span className="h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-[#F2EEE7]">
+                        <img
+                          src={p.image}
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.visibility = "hidden";
+                          }}
+                        />
+                      </span>
+                      <span
+                        className={cn(
+                          "truncate text-[0.9375rem] font-semibold text-[#1D242B] transition-colors",
+                          tone.itemHover,
+                        )}
+                      >
+                        {p.badgeLabel ?? p.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-4 text-[0.8125rem] text-slate-400">Catalogue for this line is being finalised.</p>
+              )}
+
+              <Link
+                to={`#/products/${cat.slug}`}
+                className={cn("mt-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold", tone.link)}
+              >
+                View all {total} {cat.name}
+                <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 8h11M9 4l4 4-4 4" />
+                </svg>
+              </Link>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-[#E5E0D8] pt-5">
+        <p className="text-[0.8125rem] text-slate-500">
+          {products.length} products across {categories.length} categories.
+        </p>
+        <Button to="#/products" size="sm" arrow>
+          Browse Full Catalogue
+        </Button>
+      </div>
+    </div>
   );
 }
 
@@ -194,67 +310,7 @@ export default function Header() {
                         </Link>
                       )}
 
-                      {isProduct && (
-                        <div
-                          className={cn(
-                            "absolute left-1/2 top-full z-50 w-[min(760px,calc(100vw_-_3rem))] -translate-x-1/2 overflow-hidden rounded-[2rem] border border-[#E5E0D8] bg-white/95 p-6 shadow-[0_30px_60px_-30px_rgba(29,36,43,0.25)] transition-all duration-200",
-                            openDropdown === item.label
-                              ? "pointer-events-auto opacity-100 translate-y-0"
-                              : "pointer-events-none opacity-0 translate-y-2",
-                          )}
-                        >
-                          <div className="grid gap-6 lg:grid-cols-2">
-                            <div className="rounded-[1.5rem] border border-slate-200 bg-[#FAF8F5]/90 p-6">
-                              <p className="text-xs uppercase tracking-[0.24em] text-[#0F382C]">Whole Spices</p>
-                              <div className="mt-4 space-y-3 text-sm">
-                                {[
-                                  "Black Pepper",
-                                  "Cinnamon",
-                                  "Cloves",
-                                  "Coriander Seeds",
-                                  "Cumin",
-                                  "Green Cardamom",
-                                  "Nut Meg",
-                                  "Dry Red Chilli",
-                                  "Saffron",
-                                  "Turmeric",
-                                ].map((label) => (
-                                  <Link
-                                    key={label}
-                                    to="#/products/whole-spices"
-                                    className="flex items-center gap-3 text-base font-semibold text-[#1D242B] transition hover:text-[#0F382C]"
-                                  >
-                                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 text-[0.75rem] font-semibold">
-                                      WS
-                                    </span>
-                                    {label}
-                                  </Link>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="rounded-[1.5rem] border border-slate-200 bg-[#FAF8F5]/90 p-6">
-                              <p className="text-xs uppercase tracking-[0.24em] text-[#0F382C]">Dehydrated Ingredients</p>
-                              <div className="mt-4 space-y-3 text-sm">
-                                {[
-                                  "Dehydrated Onion",
-                                  "Dehydrated Garlic",
-                                ].map((label) => (
-                                  <Link
-                                    key={label}
-                                    to="#/products/dehydrated"
-                                    className="flex items-center gap-3 text-base font-semibold text-[#1D242B] transition hover:text-[#0F382C]"
-                                  >
-                                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-[0.75rem] font-semibold">
-                                      DI
-                                    </span>
-                                    {label}
-                                  </Link>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      {isProduct && <ProductsMegaMenu open={openDropdown === item.label} />}
                     </li>
                   );
                 })}

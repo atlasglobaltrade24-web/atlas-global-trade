@@ -1,7 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/utils/cn";
 import { navigate, useRoute } from "@/lib/router";
-import { Button, Container, Section } from "@/components/ui";
+import { Button, Container, Icon, Section } from "@/components/ui";
 import { CTASection, PageHero } from "@/components/sections";
 import { ProductGrid } from "@/components/ProductCard";
 import { categories, products, type CategoryId } from "@/data/products";
@@ -17,13 +17,19 @@ export default function Products() {
 
   const activeCategory = initialCategory === "all" ? null : categories.find((c) => c.id === initialCategory)!;
 
-  const results = useMemo(
-    () =>
-      initialCategory === "all"
-        ? products
-        : products.filter((p) => p.category === initialCategory),
-    [initialCategory],
-  );
+  const [query, setQuery] = useState("");
+
+  const results = useMemo(() => {
+    const inCategory =
+      initialCategory === "all" ? products : products.filter((p) => p.category === initialCategory);
+    const q = query.trim().toLowerCase();
+    if (!q) return inCategory;
+    return inCategory.filter((p) =>
+      [p.name, p.badgeLabel, p.shortDescription, ...p.tags, ...p.forms]
+        .filter((v): v is string => Boolean(v))
+        .some((v) => v.toLowerCase().includes(q)),
+    );
+  }, [initialCategory, query]);
 
   return (
     <>
@@ -84,6 +90,20 @@ export default function Products() {
                   Showing <span className="font-medium text-ink-900 tabular-nums">{results.length}</span> of{" "}
                   {products.length} catalogue items
                 </p>
+                <div className="relative w-full sm:w-72">
+                  <Icon
+                    name="search"
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+                  />
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search products…"
+                    aria-label="Search products"
+                    className="w-full rounded-sm border border-ink-900/15 bg-ivory-50 py-2.5 pl-9 pr-3.5 text-[0.875rem] text-ink-800 placeholder:text-ink-400 transition-colors focus:border-forest-600 focus:outline-none focus:ring-2 focus:ring-forest-600/15"
+                  />
+                </div>
               </div>
 
               <ProductGrid items={results} columns={3} />

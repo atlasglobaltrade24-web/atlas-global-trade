@@ -348,6 +348,19 @@ export const getProductBySlug = (slug: string) => products.find((p) => p.slug ==
 
 export const productsByCategory = (id: CategoryId) => products.filter((p) => p.category === id);
 
+/**
+ * Bounded preview list for a category menu / teaser card. Always returns at
+ * most `limit` items, no matter how large the catalogue grows — featured
+ * products surface first, so newly added stock never has to touch UI code
+ * to appear (or overflow) in the nav.
+ */
+export const highlightedProducts = (id: CategoryId, limit = 4) => {
+  const inCategory = productsByCategory(id);
+  const featured = inCategory.filter((p) => p.featured);
+  const rest = inCategory.filter((p) => !p.featured);
+  return [...featured, ...rest].slice(0, limit);
+};
+
 export const featuredProducts = products.filter((p) => p.featured);
 
 export const allForms = Array.from(
