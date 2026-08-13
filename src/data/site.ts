@@ -394,7 +394,7 @@ export const aboutPoints = [
 
 export const stats = [
   { value: 2, suffix: "", label: "Focused product lines" },
-  { value: 23, suffix: "+", label: "Catalogue items" },
+  { value: 12, suffix: "+", label: "Catalogue items" },
   { value: 100, suffix: "%", label: "Specification-led enquiries" },
   { value: 7, suffix: "", label: "Quality control stages" },
 ] as const;
